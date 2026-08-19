@@ -1,0 +1,15 @@
+{
+  "name": "saju-ai-korea-verified",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "lunar-javascript": "1.7.7"
+  }
+}

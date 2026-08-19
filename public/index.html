@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09070b">
+<title>사주AI | 한국 기준 무료 AI 사주</title>
+<meta name="description" content="한국 기준 출생시각 보정과 실제 사주 원국 계산을 거쳐 AI가 개인화된 사주 해석을 제공합니다.">
+<style>
+:root{--bg:#09070b;--panel:#141017;--panel2:#1a141d;--line:#302832;--gold:#d5b579;--gold2:#9d7440;--text:#f3eee7;--muted:#aaa09a;--danger:#e68b8b}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:#09070b;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Apple SD Gothic Neo",sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at 50% -10%,rgba(115,73,39,.45),transparent 42%),radial-gradient(circle at 15% 35%,rgba(75,48,87,.18),transparent 32%),radial-gradient(circle at 90% 65%,rgba(72,45,31,.16),transparent 35%),#09070b}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.08;background-image:radial-gradient(rgba(255,255,255,.8) .7px,transparent .7px);background-size:24px 24px}
+button,input,select{font:inherit}button{cursor:pointer}.wrap{width:min(700px,100%);margin:auto;padding:0 17px}
+.nav{height:64px;border-bottom:1px solid rgba(213,181,121,.14);display:flex;align-items:center;justify-content:space-between}.logo{font:900 23px Georgia,"Noto Serif KR",serif;letter-spacing:-.08em}.logo b{color:var(--gold)}.small{font-size:11px;color:var(--muted)}
+.hero{text-align:center;padding:58px 0 32px}.eyebrow{font-size:11px;letter-spacing:.22em;color:var(--gold);font-weight:800}.hero h1{font:800 40px/1.25 Georgia,"Noto Serif KR",serif;letter-spacing:-.06em;margin:15px 0}.hero p{margin:0;color:var(--muted);font-size:14px;line-height:1.8}
+.form-card,.card{background:linear-gradient(180deg,rgba(24,18,28,.96),rgba(17,12,20,.96));border:1px solid var(--line);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.24)}.form-card{padding:25px}.field{margin-bottom:17px}.lab{display:block;font-size:13px;font-weight:800;margin-bottom:8px}.opt{font-weight:500;color:#7d7470;margin-left:4px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}.seg{display:grid;grid-template-columns:1fr 1fr;gap:7px}.seg button,.focus button{height:48px;border:1px solid #3a313b;background:#100c13;color:#a9a09a;border-radius:10px}.seg button.on,.focus button.on{background:#f0dfbd;color:#1a1210;border-color:#f0dfbd;font-weight:900}
+.select-row{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:8px}.select-row select,.text-input{height:49px;width:100%;border:1px solid #3a313b;background:#100c13;color:var(--text);border-radius:10px;padding:0 12px;outline:none}.select-row select:focus,.text-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(213,181,121,.08)}
+.focus{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.go{width:100%;height:56px;border:0;border-radius:12px;background:linear-gradient(135deg,#e1c28a,#a97b3e);color:#1a100b;font-size:16px;font-weight:900;margin-top:6px;box-shadow:0 10px 28px rgba(160,113,57,.22)}.micro,.foot{font-size:11px;color:#827873;line-height:1.7;text-align:center}.micro{margin-top:12px}.foot{padding:22px 0 42px}.err{margin-top:12px;border:1px solid rgba(230,139,139,.3);background:rgba(230,139,139,.08);color:#efaaaa;border-radius:10px;padding:11px;font-size:12px}.hide{display:none!important}
+.loading{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:50px 0}.mystic{width:92px;height:92px;border-radius:50%;border:1px solid rgba(213,181,121,.25);display:grid;place-items:center;margin-bottom:24px;position:relative}.mystic:before{content:"";position:absolute;inset:8px;border:1px dashed rgba(213,181,121,.42);border-radius:50%;animation:spin 5s linear infinite}.mystic:after{content:"✦";color:var(--gold);font-size:25px;animation:pulse 1.8s ease-in-out infinite}.loading h2{font:800 24px Georgia,"Noto Serif KR",serif;margin:0 0 9px}.loading p{color:var(--muted);font-size:13px;line-height:1.7;margin:0}.progress-wrap{width:min(440px,88vw);margin-top:28px}.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-size:12px;color:#9f958e}.progress-num{color:var(--gold);font-weight:900;font-size:18px}.progress-track{height:9px;background:#241d27;border:1px solid #352b37;border-radius:99px;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#8d6332,#e6cc99);border-radius:99px;transition:width .18s ease}.wait-message{min-height:42px;margin-top:18px;color:#c9b9a8;font-size:12px;line-height:1.65;transition:opacity .25s ease}.wait-message.fade{opacity:.15}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{transform:scale(1.12);opacity:.65}}
+.rh{text-align:center;padding:48px 0 24px}.rh h1{font:800 34px Georgia,"Noto Serif KR",serif;letter-spacing:-.05em;margin:12px 0 8px}.rh p{margin:0;color:var(--muted);font-size:12px}.bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}.btn{height:46px;border-radius:10px;border:1px solid #3a313b;background:#120e15;color:#ddd2ca;font-weight:800}.btn.gold{background:#e0c18a;border-color:#e0c18a;color:#19110d}.card{padding:21px;margin-bottom:12px}.card h3{margin:0 0 15px;font-size:15px}.pill-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.pc{padding:14px 6px;text-align:center;border:1px solid #342b35;border-radius:10px;background:#100c13}.pc small{display:block;color:#8d837d;font-size:10px;margin-bottom:7px}.pc b{font:700 22px Georgia,"Noto Serif KR",serif}.pc span{display:block;color:#7c726d;font-size:9px;margin-top:5px}.unknown{color:#9d9188!important;font-size:17px!important}.notice{color:#9b8e86;font-size:11px;line-height:1.7;margin:13px 0 0}.headline{font:800 21px/1.45 Georgia,"Noto Serif KR",serif;color:#ead5ad}.copy{font-size:13px;line-height:1.85;color:#c7bdb7;margin:10px 0 0;white-space:pre-line}.keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}.keys span{border:1px solid #473b44;color:#c8a96f;border-radius:99px;padding:5px 9px;font-size:10px}.scores{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.score{background:#100c13;border:1px solid #342b35;border-radius:11px;text-align:center;padding:14px 5px}.score small{display:block;color:#8d837d;font-size:10px}.score b{font-size:24px;color:#e3c58e}.score span{font-size:9px;color:#766d68}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.detail{background:#100c13;border:1px solid #342b35;border-radius:10px;padding:12px}.detail small{display:block;color:#817772;font-size:10px;margin-bottom:6px}.detail strong{font-size:12px;line-height:1.6;color:#d6cbc3}.share-note{text-align:center;color:#8c817a;font-size:10px;margin-top:9px}.flow-now{margin-top:14px;border:1px solid #3a313b;background:#100c13;border-radius:11px;padding:14px;color:#cfc4bc;font-size:12px;line-height:1.75}.flow-years{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}.flow-year{border:1px solid #342b35;background:#100c13;border-radius:10px;padding:11px}.flow-year small{display:block;color:#857b75;font-size:10px}.flow-year b{display:block;color:#e0c18a;font-size:15px;margin-top:5px}.daewoon{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.dy{border:1px solid #342b35;background:#100c13;border-radius:11px;padding:13px}.dy.now{border-color:#9d7a43;box-shadow:inset 0 0 0 1px rgba(224,193,138,.12)}.dy small{display:block;color:#857b75;font-size:10px}.dy b{display:block;font:700 20px Georgia,"Noto Serif KR",serif;color:#e0c18a;margin-top:5px}.dy span{display:block;color:#aaa098;font-size:10px;margin-top:5px}.flow-muted{color:#8c817a;font-size:11px;line-height:1.7}@media(max-width:560px){.flow-years{grid-template-columns:1fr}.daewoon{grid-template-columns:1fr}}
+@media(max-width:560px){.hero{padding-top:42px}.hero h1{font-size:32px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.form-card{padding:20px}.select-row{grid-template-columns:1fr 1fr 1fr}.focus{grid-template-columns:repeat(2,1fr)}.pill-grid{grid-template-columns:repeat(2,1fr)}.scores{grid-template-columns:repeat(2,1fr)}.bar{grid-template-columns:1fr}.rh h1{font-size:30px}}
+.result-kicker{color:#9f8d7c;font-size:11px;font-weight:800;letter-spacing:.03em;margin-bottom:9px}.hero-result{background:linear-gradient(145deg,#171018,#100c13);border-color:#4b3b45}.section-lead{margin:0 0 14px;color:#938781;font-size:11px;line-height:1.7}.highlight-list{display:grid;gap:8px;margin-top:10px}.highlight-item{display:flex;gap:10px;align-items:flex-start;background:#100c13;border:1px solid #342b35;border-radius:11px;padding:13px}.highlight-item b{color:#e0c18a;font-size:11px;min-width:65px}.highlight-item span{color:#c7bdb7;font-size:12px;line-height:1.7}.year-flow{display:grid;gap:8px}.year-item{border:1px solid #342b35;background:#100c13;border-radius:11px;padding:14px}.year-item.now{border-color:#9d7a43;box-shadow:inset 0 0 0 1px rgba(224,193,138,.12)}.year-item .year-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.year-item .year-head b{color:#e0c18a;font-size:13px}.year-item .year-head span{font-size:10px;color:#817772}.year-item p{margin:7px 0 0;color:#c7bdb7;font-size:12px;line-height:1.7}.expert-details{margin:12px 0 14px;border:1px solid #342b35;border-radius:12px;background:#0f0b12;overflow:hidden}.expert-details>summary{cursor:pointer;padding:17px 18px;color:#b9a99e;font-size:12px;font-weight:800;list-style:none}.expert-details>summary::-webkit-details-marker{display:none}.expert-details>summary:after{content:"＋";float:right;color:#8d7b6c}.expert-details[open]>summary:after{content:"−"}.expert-intro{padding:0 18px 14px;color:#756b66;font-size:10px;line-height:1.7}.expert-card{margin:0;border-top:1px solid #2a222b;border-radius:0;background:transparent}.expert-card h3{color:#a79a93}.expert-details .flow-year b,.expert-details .dy b{font-size:16px}</style>
+</head>
+<body>
+<div class="wrap">
+<header class="nav"><div class="logo">사주<b>AI</b></div><div class="small">한국 기준 무료 AI 사주</div></header>
+<section id="formPage">
+  <div class="hero"><div class="eyebrow">SAJU PERSONAL REPORT</div><h1>내 사주에 담긴<br>인생의 흐름을 확인해보세요</h1><p>생년월일시를 바탕으로 실제 사주 원국을 계산하고<br>명리학 구조를 참고해 AI가 개인화된 해석을 제공합니다.</p></div>
+  <div class="form-card">
+    <form id="form">
+      <div class="field"><label class="lab">이름</label><input id="name" class="text-input" maxlength="20" placeholder="이름을 입력해주세요" required></div>
+      <div class="grid">
+        <div class="field"><label class="lab">성별</label><div class="seg"><button type="button" class="gender on" data-v="남성">남성</button><button type="button" class="gender" data-v="여성">여성</button></div></div>
+        <div class="field"><label class="lab">달력</label><div class="seg"><button type="button" class="cal on" data-v="양력">양력</button><button type="button" class="cal" data-v="음력">음력</button></div></div>
+      </div>
+      <div class="field"><label class="lab">생년월일</label><div class="select-row"><select id="year" required><option value="">년</option></select><select id="month" required><option value="">월</option></select><select id="day" required><option value="">일</option></select></div></div>
+      <div class="field"><label class="lab">태어난 시각 <span class="opt">모르는 경우 모름 선택</span></label><select id="time" class="text-input" required><option value="">태어난 시간을 선택해주세요</option><option value="23:30">자시 23:00–00:59</option><option value="01:30">축시 01:00–02:59</option><option value="03:30">인시 03:00–04:59</option><option value="05:30">묘시 05:00–06:59</option><option value="07:30">진시 07:00–08:59</option><option value="09:30">사시 09:00–10:59</option><option value="11:30">오시 11:00–12:59</option><option value="13:30">미시 13:00–14:59</option><option value="15:30">신시 15:00–16:59</option><option value="17:30">유시 17:00–18:59</option><option value="19:30">술시 19:00–20:59</option><option value="21:30">해시 21:00–22:59</option><option value="unknown">모름</option></select></div>
+      <div class="field"><label class="lab">출생지 <span class="opt">선택</span></label><input id="place" class="text-input" placeholder="예: 수원 / 서울 / 부산"></div>
+      <div class="field"><label class="lab">가장 궁금한 것은?</label><div class="focus" id="focus"><button type="button" class="f on" data-v="전체적인 흐름">전체</button><button type="button" class="f" data-v="재물">재물</button><button type="button" class="f" data-v="직업">직업</button><button type="button" class="f" data-v="연애·인연">연애</button></div></div>
+      <button class="go" type="submit">내 사주 무료로 확인하기 →</button><div class="micro">입력 정보는 사주 계산 및 AI 분석 요청에 사용됩니다. 광고 측정 이벤트에는 이름·생년월일을 보내지 않습니다.</div><div id="err" class="err hide"></div>
+    </form>
+  </div>
+  <div class="foot">사주AI는 전통 명리학을 참고한 AI 콘텐츠 서비스입니다. 초자연적 능력이나 미래 예측의 확실성을 주장하지 않습니다.</div>
+</section>
+<section id="loading" class="hide">
+  <div class="loading">
+    <div class="mystic"></div>
+    <h2>사주의 결을 읽는 중입니다</h2>
+    <p>한국 기준 시각 보정 → 실제 사주 원국 계산 → AI 해석<br>순서로 분석하고 있습니다.</p>
+    <div class="progress-wrap"><div class="progress-top"><span>분석 진행</span><span class="progress-num" id="progressNum">0%</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="wait-message" id="waitMessage">계산된 명식을 확인하고 있습니다.</div></div>
+  </div>
+</section>
+<section id="result" class="hide">
+  <div class="rh">
+    <div class="eyebrow">YOUR PERSONAL SAJU REPORT</div>
+    <h1><span id="rn"></span>님, 당신의 사주를 풀어봤어요</h1>
+    <p id="rm"></p>
+  </div>
+
+  <div class="bar">
+    <button id="share" class="btn gold">↗ 결과 공유하기</button>
+    <button id="again" class="btn">다시 분석</button>
+  </div>
+  <div id="shareNote" class="share-note"></div>
+
+  <!-- 가장 먼저 읽히는 핵심 결과 -->
+  <div class="card hero-result">
+    <div class="result-kicker">✨ 당신을 한 문장으로 표현하면</div>
+    <div id="headline" class="headline"></div>
+    <p id="summary" class="copy"></p>
+    <div id="keys" class="keys"></div>
+  </div>
+
+  <div class="card">
+    <h3>👀 당신도 몰랐던 성향</h3>
+    <p id="personality" class="copy"></p>
+  </div>
+
+  <div class="card">
+    <h3>❤️ 연애에서는 이런 모습이에요</h3>
+    <p id="love" class="copy"></p>
+  </div>
+
+  <div class="card">
+    <h3>💰 돈을 대하는 당신의 방식</h3>
+    <p id="wealth" class="copy"></p>
+  </div>
+
+  <div class="card">
+    <h3>💼 일할 때 강점이 살아나는 순간</h3>
+    <p id="career" class="copy"></p>
+  </div>
+
+  <div class="card">
+    <h3>🌊 요즘 왜 이런 느낌이 들까?</h3>
+    <p id="flow" class="copy"></p>
+    <div id="currentFlowText" class="flow-now"></div>
+  </div>
+
+  <div class="card">
+    <h3>📅 2026년에는 무엇을 눈여겨볼까?</h3>
+    <div id="currentYearHighlights" class="highlight-list"></div>
+  </div>
+
+  <div class="card">
+    <h3>🗓️ 앞으로 5년의 분위기</h3>
+    <p class="section-lead">해마다 같은 흐름이 반복되지는 않아요. 지금부터 어떤 변화에 주목하면 좋을지 쉽게 정리했어요.</p>
+    <div id="yearFlow" class="year-flow"></div>
+  </div>
+
+  <div class="card">
+    <h3>✨ 전체적으로 보면</h3>
+    <p id="overall" class="copy"></p>
+  </div>
+
+  <div class="card">
+    <h3>⚠️ 의외로 조심하면 좋은 부분</h3>
+    <p id="caution" class="copy"></p>
+  </div>
+
+  <div class="card">
+    <h3>💡 지금 당신에게 필요한 한마디</h3>
+    <p id="advice" class="copy"></p>
+  </div>
+
+  <div class="card">
+    <h3>🌿 건강은 이렇게 챙겨보세요</h3>
+    <p id="health" class="copy"></p>
+  </div>
+
+  <!-- 전문성은 뒤로 보내고, 사용자가 원할 때만 열어본다 -->
+  <details class="expert-details">
+    <summary>🔍 전문가 분석 근거 보기</summary>
+
+    <div class="expert-intro">
+      계산된 사주 원국과 명리 구조를 바탕으로 해석한 근거입니다. 어려운 용어는 참고용으로만 확인해보세요.
+    </div>
+
+    <div class="card expert-card">
+      <h3>사주 원국</h3>
+      <div id="pill" class="pill-grid"></div>
+      <p id="corr" class="notice"></p>
+    </div>
+
+    <div class="card expert-card">
+      <h3>명리 구조</h3>
+      <div id="structure" class="detail-grid"></div>
+    </div>
+
+    <div class="card expert-card">
+      <h3>운의 흐름 · 전문 명칭</h3>
+      <div id="flowYears" class="flow-years"></div>
+      <div id="daewoon" class="daewoon"></div>
+    </div>
+  </details>
+
+  <div class="bar">
+    <button id="share2" class="btn gold">↗ 친구에게 공유</button>
+    <button id="again2" class="btn">다시 분석</button>
+  </div>
+
+  <div class="foot">
+    계산된 사주 원국은 출생지 경도와 한국 표준시/역사적 시간대 정보를 고려해 정규화합니다. 출생시각을 모른 경우 시주를 임의로 추정하지 않습니다. 결과는 자기이해를 위한 참고용입니다.
+  </div>
+</section>
+</div>
+<script>
+const $=s=>document.querySelector(s),dl=(e,d={})=>(window.dataLayer=window.dataLayer||[]).push({event:e,...d});
+let gender="남성",calendar="양력",focus="전체적인 흐름",last=null,progressTimer=null,messageTimer=null;
+const nowYear=new Date().getFullYear();
+for(let y=nowYear;y>=1900;y--){const o=document.createElement('option');o.value=y;o.textContent=y+'년';$('#year').appendChild(o)}
+for(let m=1;m<=12;m++){const o=document.createElement('option');o.value=m;o.textContent=m+'월';$('#month').appendChild(o)}
+function updateDays(){const y=Number($('#year').value)||2000,m=Number($('#month').value)||1,old=$('#day').value;$('#day').innerHTML='<option value="">일</option>';const max=calendar==='양력'?new Date(y,m,0).getDate():31;for(let d=1;d<=max;d++){const o=document.createElement('option');o.value=d;o.textContent=d+'일';$('#day').appendChild(o)}if(old&&old<=max)$('#day').value=old}
+$('#year').onchange=updateDays;$('#month').onchange=updateDays;updateDays();
+document.querySelectorAll('.gender').forEach(b=>b.onclick=()=>{document.querySelectorAll('.gender').forEach(x=>x.classList.remove('on'));b.classList.add('on');gender=b.dataset.v});
+document.querySelectorAll('.cal').forEach(b=>b.onclick=()=>{document.querySelectorAll('.cal').forEach(x=>x.classList.remove('on'));b.classList.add('on');calendar=b.dataset.v;updateDays()});
+document.querySelectorAll('.f').forEach(b=>b.onclick=()=>{document.querySelectorAll('.f').forEach(x=>x.classList.remove('on'));b.classList.add('on');focus=b.dataset.v;dl('focus_select',{focus})});
+function put(id,v){const el=$(id);if(el)el.textContent=v??''}
+function stopLoading(){clearInterval(progressTimer);clearInterval(messageTimer)}
+function startLoading(){let p=0;put('#progressNum','0%');$('#progressFill').style.width='0%';const messages=['실제 사주 전문가들이 사용하는 전통 명리학 분석 방식을 바탕으로 결과를 이해하기 쉽게 풀어쓰고 있어요.','전문가들이 사주를 해석할 때 사용하는 여러 기준을 종합해 당신만의 결과를 만들고 있어요.','복잡한 사주 용어는 쉽게 풀고, 핵심 내용은 놓치지 않도록 정리하고 있어요.','단순한 운세 문구가 아니라 계산된 사주 명식을 바탕으로 내용을 정리하고 있어요.','당신의 사주에서 눈여겨볼 만한 특징들을 찾고 있어요.'];let i=0;put('#waitMessage',messages[0]);progressTimer=setInterval(()=>{p=Math.min(92,p+(p<55?2.2:0.8));put('#progressNum',Math.floor(p)+'%');$('#progressFill').style.width=p+'%'},120);messageTimer=setInterval(()=>{const el=$('#waitMessage');el.classList.add('fade');setTimeout(()=>{i=(i+1)%messages.length;put('#waitMessage',messages[i]);el.classList.remove('fade')},220)},5000)}
+async function run(e){e.preventDefault();put('#err','');$('#err').classList.add('hide');const y=$('#year').value,m=String($('#month').value).padStart(2,'0'),d=String($('#day').value).padStart(2,'0'),time=$('#time').value;const profile={name:$('#name').value.trim(),birthDate:`${y}-${m}-${d}`,birthTime:time,place:$('#place').value.trim(),gender,calendar,focus};if(!profile.name||!y||!$('#month').value||!$('#day').value||!time){put('#err','이름, 생년월일을 입력해주세요. 태어난 시각을 모르는 경우 모름을 선택해주세요.');$('#err').classList.remove('hide');return}dl('form_submit',{calendar,gender,focus,has_birth_time:time!=='unknown'});$('#formPage').classList.add('hide');$('#loading').classList.remove('hide');window.scrollTo(0,0);startLoading();try{const c=await fetch('/api/calculate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(profile)});const cj=await c.json();if(!c.ok||!cj.ok)throw new Error(cj.detail||cj.error||'사주 계산에 실패했습니다.');const a=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({profile,eight:cj.eight})});const aj=await a.json();if(!a.ok||!aj.ok)throw new Error(aj.detail||aj.error||'AI 분석에 실패했습니다.');last={profile,eight:cj.eight,result:aj};stopLoading();$('#progressFill').style.width='100%';put('#progressNum','100%');await new Promise(r=>setTimeout(r,250));render(last);$('#loading').classList.add('hide');$('#result').classList.remove('hide');dl('result_view',{focus,cached:!!aj.cached});window.scrollTo(0,0)}catch(x){stopLoading();$('#loading').classList.add('hide');$('#formPage').classList.remove('hide');put('#err',x.message||'분석 중 문제가 발생했습니다.');$('#err').classList.remove('hide')}}
+$('#form').onsubmit=run;
+function render(x){
+  put('#rn',x.profile.name);
+  put('#rm',`${x.profile.birthDate.replaceAll('-','.')} · ${x.profile.gender} · ${x.profile.calendar}${x.profile.place?' · '+x.profile.place:''}`);
+
+  const p=[['년주',x.eight.year],['월주',x.eight.month],['일주',x.eight.day],['시주',x.eight.time||'미상']];
+  $('#pill').innerHTML=p.map(v=>`<div class="pc"><small>${v[0]}</small><b class="${v[1]==='미상'?'unknown':''}">${v[1]}</b><span>${v[1]==='미상'?'출생시각 미상':'사주 기둥'}</span></div>`).join('');
+
+  put('#corr',
+    `출생지: ${x.eight.correction.city} · 경도 보정 ${x.eight.correction.longitudeCorrectionMinutes>0?'+':''}${x.eight.correction.longitudeCorrectionMinutes}분 · 한국 시간대 ${x.eight.correction.utcOffsetMinutes}분 적용${x.eight.timeUnknown?' · 시주는 미상으로 처리':''}`
+  );
+
+  const e=x.eight;
+  const rel=(e.relations||[]).join(' · ')||'원국에서 표시할 주요 관계가 없습니다.';
+  const fe=Object.entries(e.visibleFiveElements||{}).map(([k,v])=>`${k} ${v}`).join(' · ')||'계산 정보 없음';
+  const tg=e.tenGods||{};
+
+  $('#structure').innerHTML=[
+    ['일간',e.dayGan||'미상'],
+    ['오행(천간·지지)',fe],
+    ['천간 십신',`년 ${tg.year||'-'} · 월 ${tg.month||'-'} · 시 ${tg.time||'-'}`],
+    ['지장간',`년 ${(e.yearHideGan||[]).join(',')||'-'} · 월 ${(e.monthHideGan||[]).join(',')||'-'} · 일 ${(e.dayHideGan||[]).join(',')||'-'}`],
+    ['십이운성',`년 ${e.diShi?.year||'-'} · 월 ${e.diShi?.month||'-'} · 일 ${e.diShi?.day||'-'}${e.timeUnknown?'':' · 시 '+(e.diShi?.time||'-')}`],
+    ['납음',`년 ${e.naYin?.year||'-'} · 월 ${e.naYin?.month||'-'} · 일 ${e.naYin?.day||'-'}`],
+    ['명궁·신궁',`${e.mingGong||'-'} · ${e.shenGong||'-'}`],
+    ['공망',e.xunKong?.day||'-'],
+    ['원국 관계',rel]
+  ].map(v=>`<div class="detail"><small>${v[0]}</small><strong>${v[1]}</strong></div>`).join('');
+
+  const ff=e.fortuneFlow||{};
+  if(ff.available){
+    const cur=ff.currentDaYun;
+    const ln=ff.currentLiuNian;
+
+    // 전문 간지는 접힌 "전문 분석 근거"에서만 보여준다.
+    put('#flowNow',
+      cur
+        ? `지금은 ${cur.startAge??'-'}세부터 이어지는 10년 단위의 큰 흐름에 해당해요. ${ln?'올해의 흐름까지 함께 살펴보면 지금 시기에 어떤 선택과 변화에 주목하면 좋을지 더 쉽게 볼 수 있어요.':''}`
+        : '현재의 큰 흐름을 확인하고 있어요.'
+    );
+
+    const years=(cur?.liuNian||[])
+      .filter(v=>v.year>=ff.currentYear-1&&v.year<=ff.currentYear+3);
+
+    $('#flowYears').innerHTML=years
+      .map(v=>`<div class="flow-year"><small>${v.year}년</small><b>${v.ganZhi||'-'}</b><span>${v.year===ff.currentYear?'현재 세운':''}</span></div>`)
+      .join('');
+
+    $('#daewoon').innerHTML=(ff.daewoon||[])
+      .map(d=>`<div class="dy ${cur&&d.ganZhi===cur.ganZhi?'now':''}"><small>${d.startYear}~${d.endYear} · ${d.startAge??'-'}세부터</small><b>${d.ganZhi}</b><span>${cur&&d.ganZhi===cur.ganZhi?'현재 대운':''}</span></div>`)
+      .join('');
+  }else{
+    put('#flowNow','현재의 운의 흐름을 계산하지 못해 원국 중심으로 분석했어요.');
+    $('#flowYears').innerHTML='';
+    $('#daewoon').innerHTML='<div class="flow-muted">대운 정보 없음</div>';
+  }
+
+  const r=x.result||{};
+
+  put('#currentFlowText',r.currentFlow||'');
+  $('#currentYearHighlights').innerHTML=(r.currentYearHighlights||[])
+    .map((v,i)=>`<div class="highlight-item"><b>올해 포인트 ${i+1}</b><span>${v}</span></div>`)
+    .join('');
+
+  $('#yearFlow').innerHTML=(r.yearFlow||[])
+    .map(v=>`<div class="year-item ${Number(v.year)===Number(new Date().getFullYear())?'now':''}">
+      <div class="year-head">
+        <b>${v.year}년 · ${v.title}</b>
+        <span>${Number(v.year)===Number(new Date().getFullYear())?'지금':'앞으로'}</span>
+      </div>
+      <p>${v.description}</p>
+    </div>`)
+    .join('');
+
+  ['headline','summary','personality','overall','wealth','career','love','health','flow','advice','caution']
+    .forEach(k=>put('#'+k,r[k]||''));
+
+  $('#keys').innerHTML=(r.keywords||[])
+    .map(k=>`<span>${k}</span>`)
+    .join('');
+
+  const s=r.scores||{};
+  $('#scores')?.replaceChildren(
+    ...[['종합',s.overall],['재물',s.wealth],['직업',s.career],['인연',s.love]]
+      .map(v=>{
+        const el=document.createElement('div');
+        el.className='score';
+        el.innerHTML=`<small>${v[0]}</small><b>${v[1]??'-'}</b><span>/100</span>`;
+        return el;
+      })
+  );
+}
+
+async function share(){if(!last)return;dl('share_click');const r=last.result||{};const text=`사주AI 무료 사주 결과\n${last.profile.name}님의 사주\n\n${r.headline||''}\n${r.summary||''}\n\n${location.href}`;try{const mobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);if(mobile&&navigator.share){await navigator.share({title:'사주AI 무료 사주 결과',text,url:location.href});put('#shareNote','공유 메뉴가 열렸습니다.');return}if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);put('#shareNote','결과 요약과 사이트 주소가 복사되었습니다.');return}const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();document.execCommand('copy');ta.remove();put('#shareNote','결과 요약과 사이트 주소가 복사되었습니다.')}catch(e){if(e?.name!=='AbortError')put('#shareNote','공유 정보를 복사하지 못했습니다. 다시 눌러주세요.')}}
+$('#share').onclick=share;$('#share2').onclick=share;function again(){dl('again_click');$('#result').classList.add('hide');$('#formPage').classList.remove('hide');window.scrollTo(0,0)}$('#again').onclick=again;$('#again2').onclick=again;
+</script>
+</body>
+</html>
